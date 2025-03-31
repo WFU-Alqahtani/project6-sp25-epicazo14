@@ -28,26 +28,147 @@ public class LinkedList {
     // remove a card from a specific index
     public Card remove_from_index(int index) {
         // FIXME
+        if(head == null) {
+            return null;
+        }
+        Node curr = head;
+        int currentIndex = 0;
+        while(curr.next != null) {
+            if(currentIndex == index) {
+                break;
+            }
+            curr = curr.next;
+            currentIndex++;
+        }
+        System.out.print(currentIndex);
+        curr.data.print_card();
+        if(curr == head){
+            System.out.println("Removing from head");
+          return remove_from_head();
+        }else if(curr == tail){
+            System.out.println("Removing from tail");
+            tail.prev.next = null;
+            tail = tail.prev;
+        }else{
+            System.out.println("Removing from index");
+            Node temp = curr.next;
+            curr.prev.next = curr.next;
+            curr.next.prev = curr.prev;
+            curr.next = null;
+            curr.prev = null;
+
+        }
+        size -= 1;
+        return curr.data;
     }
 
     // insert a card at a specific index
     public void insert_at_index(Card x, int index) {
         // FIXME
+        if(head == null) {
+            return;
+        }
+        Node n = new Node(x);
+        int currentIndex = 0;
+        Node curr = head;
+        while(curr.next != null) {
+            if(currentIndex == index) {
+                break;
+            }
+            curr = curr.next;
+            currentIndex++;
+        }
+        if(curr == head) {
+            System.out.println("Inserting in head");
+            n.next = head;
+            head.prev = n;
+            head = n;
+            size ++;
+        }else if(curr == tail) {
+           System.out.println("Inserting in tail");
+            add_at_tail(n.data);
+        }else{
+            System.out.println("Inserting in index");
+            curr.prev.next = n;
+            n.prev = curr.prev;
+            curr.prev = n;
+            n.next = curr;
+            size ++;
+        }
+
     }
 
     // swap two cards in the deck at the specific indices
     public void swap(int index1, int index2) {
         // FIXME
+        Node curr = head;
+        Node card1 = new Node();
+        Node card2 = new Node();
+        int currentIndex = 0;
+        while(curr.next != null) {
+            if(currentIndex == index1) {
+                card1 = curr;
+            }else if(currentIndex == index2) {
+                card2 = curr;
+            }
+            curr = curr.next;
+            currentIndex++;
+        }
+
+
+
+        insert_at_index(remove_from_index(index1),index2);
+
+
+        System.out.println("Currents size" + size);
+
+        curr = head;
+        currentIndex = 0;
+        while(curr.next != null) {
+            assert card2 != null;
+            if(curr.data == card2.data) {
+                break;
+            }
+            curr = curr.next;
+            currentIndex++;
+        }
+        int newCardIndex = currentIndex;
+        insert_at_index(remove_from_index(newCardIndex),index1);
+
     }
 
     // add card at the end of the list
     public void add_at_tail(Card data) {
         // FIXME
+        Node n = new Node(data);
+        if(head == null) {
+            head = n;
+            tail = n;
+            head.next = tail.next;
+            tail.prev = head.prev;
+            size++;
+        }
+        else {
+            tail.next = n;
+            n.prev = tail;
+            tail = n;
+            tail.next = null;
+            size++;
+        }
     }
 
     // remove a card from the beginning of the list
     public Card remove_from_head() {
         // FIXME
+        if(head == null) {
+            return null;
+        }
+        Node n = head;
+        head = head.next;
+        head.prev.next = null;
+        head.prev = null;
+        size -= 1;
+        return n.data;
     }
 
     // check to make sure the linked list is implemented correctly by iterating forwards and backwards
@@ -64,6 +185,7 @@ public class LinkedList {
             count_forward++;
         }
 
+
         // count nodes, counting backward
         curr = tail;
         int count_backward = 0;
@@ -72,8 +194,12 @@ public class LinkedList {
             count_backward++;
         }
 
+
         // check that forward count, backward count, and internal size of the list match
         if (count_backward == count_forward && count_backward == size) {
+            System.out.println("Count forward:  " + count_forward);
+            System.out.println("Count backward: " + count_backward);
+            System.out.println("Size of LL:     " + size);
             System.out.println("Basic sanity Checks passed");
         }
         else {
@@ -92,11 +218,11 @@ public class LinkedList {
         int i = 1;
         while(curr != null) {
             curr.data.print_card();
-            if(curr.next != null)
+            if (curr.next != null)
                 System.out.print(" -->  ");
-            else
+            else{
                 System.out.println(" X");
-
+        }
             if (i % 7 == 0) System.out.println("");
             i = i + 1;
             curr = curr.next;

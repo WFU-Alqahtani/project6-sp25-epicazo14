@@ -30,6 +30,7 @@ public class lab6 {
         deck.print();
         deck.sanity_check(); // because we can all use one
 
+
         // shuffle the deck (random order)
         deck.shuffle(512);
         deck.print();
@@ -49,5 +50,8 @@ public class lab6 {
 
         // let the games begin!
         play_blind_mans_bluff(player1, computer, deck);
+
     }
+
+
 }
